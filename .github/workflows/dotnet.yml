@@ -48,7 +48,7 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@master
-      
+
     - name: Download Artifact
       uses: actions/download-artifact@v1
       with: 
@@ -59,15 +59,23 @@ jobs:
       with:
         dotnet-version: 7.0.x
 
+    - name: Build with dotnet
+      run: dotnet build ${{ env.DOTNET_PATH }}/CalculationEngine.csproj --configuration ${{ env.CONFIGURATION }} --version-suffix prerelease-$(date +%Y%m%d%H%M%S)
+      shell: bash
+
     - name: Pack
-      run: dotnet pack ${{ env.DOTNET_PATH }}/CalculationEngine.csproj --output ./artifacts -c ${{ env.CONFIGURATION}} -p:Version=${{ env.VERSION}}
+      run: dotnet pack ${{ env.DOTNET_PATH }}/CalculationEngine.csproj -c ${{ env.CONFIGURATION}} #--output ./artifacts -p:Version=${{ env.VERSION}}
 
-    - name: Add package source
-      run: dotnet nuget add source https://nuget.pkg.github.com/robertath/index.json -n github -u robertath -p ${{ secrets.NUGETAPIKEY }} --store-password-in-clear-text
+    # - name: Add package source
+    #   run: dotnet nuget add source https://nuget.pkg.github.com/robertath/index.json -n github -u robertath -p ${{ secrets.NUGETAPIKEY }} --store-password-in-clear-text
 
-    - name: Publish
-      run: dotnet nuget push '**/*.nupkg' --source github --api-key ${{ secrets.NUGETAPIKEY }}
+    # - name: Publish
+    #   run: dotnet nuget push **/*.nupkg --source github --api-key ${{ secrets.NUGETAPIKEY }}
 
+    - name: NuGet push
+      run: |
+        dotnet nuget add source https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json --name github --username ${{ github.repository_owner }} --password ${{ secrets.NUGETAPIKEY }} --store-password-in-clear-text
+        dotnet nuget push **/*.nupkg --source github
 
 
     
