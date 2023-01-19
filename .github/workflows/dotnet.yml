@@ -56,11 +56,17 @@ jobs:
       with:
         dotnet-version: 7.0.x
 
+    - name: Build
+      run: dotnet build ${{ env.DOTNET_PATH }} --no-restore -c ${{ env.CONFIGURATION}}
+
+    - name: Pack
+      run: dotnet pack ${{ env.DOTNET_PATH }}/CalculationEngine.csproj --output ./artifacts -c ${{ env.CONFIGURATION}} -p:Version=${{ env.VERSION}}
+
     - name: Add package source
       run: dotnet nuget add source https://nuget.pkg.github.com/robertath/index.json -n github -u robertath -p ${{ secrets.NUGETAPIKEY }} --store-password-in-clear-text
 
     - name: Publish
-      run: dotnet nuget push './nupkg/**.nupkg' --source github --api-key ${{ secrets.NUGETAPIKEY }}
+      run: dotnet nuget push '**/*.nupkg' --source github --api-key ${{ secrets.NUGETAPIKEY }}
 
 
 
