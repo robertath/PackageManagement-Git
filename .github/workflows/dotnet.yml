@@ -69,8 +69,11 @@ jobs:
     - name: Generate a NuGet package
       run: dotnet pack ${{ env.DOTNET_PATH }}/CalculationEngine.csproj -c ${{ env.CONFIGURATION}} -o .
 
+    - name: Add package source
+      run: dotnet nuget add source https://nuget.pkg.github.com/robertath/index.json -n github -u robertath -p ${{ secrets.NUGETAPIKEY }} --store-password-in-clear-text
+
     - name: Push to GitHub package registry
-      run: dotnet nuget push *.nupkg --api-key ${{ secrets.NUGETAPIKEY }}
+      run: dotnet nuget push *.nupkg --api-key ${{ secrets.NUGETAPIKEY }} --source github
 
     # - name: Setup .NET
     #   uses: actions/setup-dotnet@v3
@@ -81,8 +84,6 @@ jobs:
     # - name: Pack
     #   run: dotnet pack ${{ env.DOTNET_PATH }}/CalculationEngine.csproj -c ${{ env.CONFIGURATION}} #--output ./artifacts -p:Version=${{ env.VERSION}}
 
-    # - name: Add package source
-    #   run: dotnet nuget add source https://nuget.pkg.github.com/robertath/index.json -n github -u robertath -p ${{ secrets.NUGETAPIKEY }} --store-password-in-clear-text
 
     # - name: Publish
     #   run: dotnet nuget push **/*.nupkg --source github --api-key ${{ secrets.NUGETAPIKEY }}
