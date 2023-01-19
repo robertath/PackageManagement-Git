@@ -46,6 +46,9 @@ jobs:
     if: github.rf =='refs/heads/develop' || github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
+    - name: Checkout repository
+      uses: actions/checkout@master
+      
     - name: Download Artifact
       uses: actions/download-artifact@v1
       with: 
@@ -55,9 +58,6 @@ jobs:
       uses: actions/setup-dotnet@v3
       with:
         dotnet-version: 7.0.x
-
-    - name: Build
-      run: dotnet build ${{ env.DOTNET_PATH }} --no-restore -c ${{ env.CONFIGURATION}}
 
     - name: Pack
       run: dotnet pack ${{ env.DOTNET_PATH }}/CalculationEngine.csproj --output ./artifacts -c ${{ env.CONFIGURATION}} -p:Version=${{ env.VERSION}}
