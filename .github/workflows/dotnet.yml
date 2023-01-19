@@ -7,7 +7,7 @@ on:
     branches: [ "*" ]
 
 env:
-  DOTNET_PATH: ${{ github.workspace }}'/CalculationEngine/CalculationEngine/'
+  DOTNET_PATH: ${{ github.workspace }}/CalculationEngine/CalculationEngine/
   CONFIGURATION: 'Release'
   VERSION: '1.0.0'
 
