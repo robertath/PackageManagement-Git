@@ -25,13 +25,13 @@ jobs:
       run: dotnet restore ${{ env.DOTNET_PATH }}        
       
     - name: Build
-      run: dotnet build ${{ env.DOTNET_PATH }}/CalculationEngine.csproj --no-restore -C ${{ env.CONFIGURATION}}
+      run: dotnet build ${{ env.DOTNET_PATH }} --no-restore -c ${{ env.CONFIGURATION}}
       
     - name: Test
-      run: dotnet test ${{ env.DOTNET_PATH }}/CalculationEngine.csproj --no-build --verbosity normal
+      run: dotnet test ${{ env.DOTNET_PATH }} --no-build --verbosity normal
 
     - name: Pack
-      run: dotnet pack ${{ env.DOTNET_PATH }}/CalculationEngine.csproj --output ./artifacts -c ${{ env.CONFIGURATION}} -p:Version=$GITHUB_RUN_ID
+      run: dotnet pack ${{ env.DOTNET_PATH }} --output ./artifacts -c ${{ env.CONFIGURATION}} -p:Version=$GITHUB_RUN_ID
 
     - name: Upload Artifacts
       uses: actions/upload-artifact@v2
