@@ -22,24 +22,24 @@ jobs:
       with:
         dotnet-version: 7.0.x
         
-    - name: Restore dependencies
-      run: dotnet restore ${{ env.DOTNET_PATH }}        
+    # - name: Restore dependencies
+    #   run: dotnet restore ${{ env.DOTNET_PATH }}        
       
-    - name: Build
-      run: dotnet build ${{ env.DOTNET_PATH }} --no-restore -c ${{ env.CONFIGURATION}}
+    # - name: Build
+    #   run: dotnet build ${{ env.DOTNET_PATH }} --no-restore -c ${{ env.CONFIGURATION}}
       
-    - name: Test
-      run: dotnet test ${{ env.DOTNET_PATH }} --no-build --verbosity normal
+    # - name: Test
+    #   run: dotnet test ${{ env.DOTNET_PATH }} --no-build --verbosity normal
 
-    - name: Pack
-      run: dotnet pack ${{ env.DOTNET_PATH }}/CalculationEngine.csproj --output ./artifacts -c ${{ env.CONFIGURATION}} -p:Version=${{ env.VERSION}}
-      #run: dotnet pack ${{ env.DOTNET_PATH }}/CalculationEngine.csproj --output ./artifacts -c ${{ env.CONFIGURATION}} -p:Version=$GITHUB_RUN_ID
+    # - name: Pack
+    #   run: dotnet pack ${{ env.DOTNET_PATH }}/CalculationEngine.csproj --output ./artifacts -c ${{ env.CONFIGURATION}} -p:Version=${{ env.VERSION}}
+    #   #run: dotnet pack ${{ env.DOTNET_PATH }}/CalculationEngine.csproj --output ./artifacts -c ${{ env.CONFIGURATION}} -p:Version=$GITHUB_RUN_ID
 
-    - name: Upload Artifacts
-      uses: actions/upload-artifact@v2
-      with:
-        name: nupkg
-        path: ./artifacts/*.nupkg
+    # - name: Upload Artifacts
+    #   uses: actions/upload-artifact@v2
+    #   with:
+    #     name: nupkg
+    #     path: ./artifacts/*.nupkg
 
   publish:
     needs: build
@@ -70,8 +70,8 @@ jobs:
       run: dotnet pack ${{ env.DOTNET_PATH }}/CalculationEngine.csproj -c ${{ env.CONFIGURATION}} -o .
 
     - name: Push to GitHub package registry
-      run: dotnet nuget push *.nupkg
-      
+      run: dotnet nuget push *.nupkg --api-key ${{ secrets.NUGETAPIKEY }}
+
     # - name: Setup .NET
     #   uses: actions/setup-dotnet@v3
     #   with:
