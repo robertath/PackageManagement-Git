@@ -10,7 +10,8 @@ on:
     branches: [ "*" ]
 
 env:
-  solutionFolder: '${{ github.workspace }}/CalculationEngine/CalculationEngine/'
+  SOLUTION_PATH: '${{ github.workspace }}/CalculationEngine/CalculationEngine/'
+  CONFIGURATION: 'Release'
 
 jobs:
   build:
@@ -25,12 +26,44 @@ jobs:
         dotnet-version: 7.0.x
         
     - name: Restore dependencies
-      run: dotnet restore        
+      run: dotnet restore ${{ env.SOLUTION_PATH }}        
       
     - name: Build
-      run: dotnet build --no-restore
+      run: dotnet build ${{ env.SOLUTION_PATH }} --no-restore -C ${{ env.CONFIGURATION}}
       
     - name: Test
-      run: dotnet test --no-build --verbosity normal
+      run: dotnet test ${{ env.SOLUTION_PATH }} --no-build --verbosity normal
+
+    - name: Pack
+      run: dotnet pack ${{ env.SOLUTION_PATH }} --output ./artifacts -c ${{ env.CONFIGURATION}} -p:Version=$GITHUB_RUN_ID
+
+    - name: Upload Artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: nupkg
+        path: ./artifacts/*.nupkg
+
+  publish:
+    needs: build
+    if: github.rf =='refs/heads/develop' || github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+    - name: Download Artifact
+      uses: actions/download-artifact@v1
+      with: 
+        name: nupkg
+    
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: 7.0.x
+
+    - name: Add package source
+      run: dotnet nuget add source https://nuget.pkg.github.com/robertath/index.json -n github -u robertath =p ${{ secrets.NUGETAPIKEY }} --store-password-in-clear-text
+
+    - name: Publish
+      run: dotnet nuget push ./nupkg/**.nupkg --source github --api-key ${{ secrets.NUGETAPIKEY }}
+
+
 
     
