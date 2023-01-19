@@ -60,7 +60,7 @@ jobs:
       run: dotnet nuget add source https://nuget.pkg.github.com/robertath/index.json -n github -u robertath -p ${{ secrets.NUGETAPIKEY }} --store-password-in-clear-text
 
     - name: Publish
-      run: dotnet nuget push ./nupkg/**.nupkg --source github --api-key ${{ secrets.NUGETAPIKEY }}
+      run: dotnet nuget push './nupkg/**.nupkg' --source github --api-key ${{ secrets.NUGETAPIKEY }}
 
 
 
