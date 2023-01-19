@@ -5,6 +5,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
 	<GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+	<RepositoryUrl>https://github.com/robertath/PackageManagement-Git</RepositoryUrl>
   </PropertyGroup>
 
 </Project>
