@@ -5,7 +5,7 @@
 ### Create Personal Token
 ##### 1. On User settings Generate a new token
 ##### 2. Paste it on action secrets project
-NUGETAPIKEY: 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
+NUGETAPIKEY: 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
 
 #### 3. Set new feed on Visual Studio
 - go to visual studio - manage nuget packages
