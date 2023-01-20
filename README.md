@@ -7,3 +7,6 @@
 ##### 2. Paste it on action secrets project
 NUGETAPIKEY: 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
 
+#### 3. Set new feed on Visual Studio
+- go to visual studio - manage nuget packages
+
