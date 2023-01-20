@@ -12,39 +12,9 @@ env:
   VERSION: '1.0.0'
 
 jobs:
-  # build:
-  #   runs-on: ubuntu-latest
-
-  #   steps:
-  #   - uses: actions/checkout@v3
-
-  #   - name: Setup .NET
-  #     uses: actions/setup-dotnet@v3
-  #     with:
-  #       dotnet-version: 7.0.x
-        
-    # - name: Restore dependencies
-    #   run: dotnet restore ${{ env.DOTNET_PATH }}        
-      
-    # - name: Build
-    #   run: dotnet build ${{ env.DOTNET_PATH }} --no-restore -c ${{ env.CONFIGURATION}}
-      
-    # - name: Test
-    #   run: dotnet test ${{ env.DOTNET_PATH }} --no-build --verbosity normal
-
-    # - name: Pack
-    #   run: dotnet pack ${{ env.DOTNET_PATH }}/CalculationEngine.csproj --output ./artifacts -c ${{ env.CONFIGURATION}} -p:Version=${{ env.VERSION}}
-    #   #run: dotnet pack ${{ env.DOTNET_PATH }}/CalculationEngine.csproj --output ./artifacts -c ${{ env.CONFIGURATION}} -p:Version=$GITHUB_RUN_ID
-
-    # - name: Upload Artifacts
-    #   uses: actions/upload-artifact@v2
-    #   with:
-    #     name: nupkg
-    #     path: ./artifacts/*.nupkg
-
-  publish:
-    needs: build
-    if: github.rf =='refs/heads/develop' || github.ref == 'refs/heads/main'
+  build:
+    # needs: build
+    # if: github.rf =='refs/heads/develop' || github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
     - name: Checkout repository
@@ -79,8 +49,8 @@ jobs:
     - name: List files
       run: cd artifact; ls -la
 
-    # - name: Add package source
-    #   run: dotnet nuget add source https://nuget.pkg.github.com/robertath/index.json -n github -u robertath -p ${{ secrets.NUGETAPIKEY }} --store-password-in-clear-text
+    - name: Add package source
+      run: dotnet nuget add source https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json -n github -u robertath -p ${{ secrets.NUGETAPIKEY }} --store-password-in-clear-text
 
     - name: Push to GitHub package registry
       run: dotnet nuget push ./artifact/*.nupkg --api-key ${{ secrets.NUGETAPIKEY }} --source https://nuget.pkg.github.com/robertath/index.json
@@ -105,3 +75,32 @@ jobs:
 
 
     
+# build:
+  #   runs-on: ubuntu-latest
+
+  #   steps:
+  #   - uses: actions/checkout@v3
+
+  #   - name: Setup .NET
+  #     uses: actions/setup-dotnet@v3
+  #     with:
+  #       dotnet-version: 7.0.x
+        
+    # - name: Restore dependencies
+    #   run: dotnet restore ${{ env.DOTNET_PATH }}        
+      
+    # - name: Build
+    #   run: dotnet build ${{ env.DOTNET_PATH }} --no-restore -c ${{ env.CONFIGURATION}}
+      
+    # - name: Test
+    #   run: dotnet test ${{ env.DOTNET_PATH }} --no-build --verbosity normal
+
+    # - name: Pack
+    #   run: dotnet pack ${{ env.DOTNET_PATH }}/CalculationEngine.csproj --output ./artifacts -c ${{ env.CONFIGURATION}} -p:Version=${{ env.VERSION}}
+    #   #run: dotnet pack ${{ env.DOTNET_PATH }}/CalculationEngine.csproj --output ./artifacts -c ${{ env.CONFIGURATION}} -p:Version=$GITHUB_RUN_ID
+
+    # - name: Upload Artifacts
+    #   uses: actions/upload-artifact@v2
+    #   with:
+    #     name: nupkg
+    #     path: ./artifacts/*.nupkg
