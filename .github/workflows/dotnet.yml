@@ -41,9 +41,6 @@ jobs:
     - name: List sources nuget
       run: dotnet nuget list source
 
-    - name: Remove package source
-      run: dotnet nuget remove source github 
-    
     - name: Add package source
       run: dotnet nuget add source https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json -u robertath -p ${{ secrets.NUGETAPIKEY }} --store-password-in-clear-text -n github
 
