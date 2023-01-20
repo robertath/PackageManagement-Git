@@ -53,13 +53,13 @@ jobs:
       run: dotnet nuget remove source Source 
     
     - name: Add package source
-      run: dotnet nuget update source https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json -u robertath -p ${{ secrets.NUGETAPIKEY }} --store-password-in-clear-text --name git-robertath
+      run: dotnet nuget add source https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json -u robertath -p ${{ secrets.NUGETAPIKEY }} --store-password-in-clear-text -n github
 
     - name: List sources nuget
       run: dotnet nuget list source
-    
+        
     - name: Push to GitHub package registry
-      run: dotnet nuget push ./artifact/*.nupkg --api-key ${{ secrets.NUGETAPIKEY }} --source git-robertath
+      run: dotnet nuget push ./artifact/*.nupkg --api-key ${{ secrets.NUGETAPIKEY }} --source github --skip-duplicate --no-symbols true
 
 
 
@@ -71,8 +71,6 @@ jobs:
     # - name: Setup NuGet
     #   uses: NuGet/setup-nuget@v1.0.5
 
-    # - name: Pack
-    #   run: dotnet pack ${{ env.DOTNET_PATH }}/CalculationEngine.csproj -c ${{ env.CONFIGURATION}} #--output ./artifacts -p:Version=${{ env.VERSION}}
 
 
     # - name: Publish
