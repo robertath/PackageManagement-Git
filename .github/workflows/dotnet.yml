@@ -25,15 +25,6 @@ jobs:
     #   with: 
     #     name: nupkg
 
-    - name: Setup .NET environment
-      uses: actions/setup-dotnet@v1
-      with:
-        name: github
-        dotnet-version: '7.0.x'
-        source-url: https://nuget.pkg.github.com/robertath/index.json
-      env:
-        NUGET_AUTH_TOKEN: ${{secrets.NUGETAPIKEY}}
-    
     - name: Restore dependencies
       run: dotnet restore ${{ env.DOTNET_PATH }}   
 
@@ -60,7 +51,7 @@ jobs:
       run: dotnet nuget list source
         
     - name: Push to GitHub package registry
-      run: dotnet nuget push ./artifact/*.nupkg --api-key ${{ secrets.NUGETAPIKEY }} --source github --skip-duplicate --no-symbols true
+      run: dotnet nuget push ./artifact/*.nupkg --api-key ${{ secrets.NUGETAPIKEY }} --source github --skip-duplicate --no-symbols
 
 
 
