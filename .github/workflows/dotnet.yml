@@ -33,9 +33,6 @@ jobs:
       env:
         NUGET_AUTH_TOKEN: ${{secrets.NUGETAPIKEY}}
     
-    - name: Setup NuGet
-      uses: NuGet/setup-nuget@v1.0.5
-
     - name: Restore dependencies
       run: dotnet restore ${{ env.DOTNET_PATH }}   
 
@@ -49,17 +46,24 @@ jobs:
     - name: List files
       run: cd artifact; ls -la
 
+    - name: List sources nuget
+      run: dotnet nuget list source
+
     - name: Add package source
-      run: dotnet nuget add source https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json -n github -u robertath -p ${{ secrets.NUGETAPIKEY }} --store-password-in-clear-text
+      run: dotnet nuget update source https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json -n github -u robertath -p ${{ secrets.NUGETAPIKEY }} --store-password-in-clear-text
 
     - name: Push to GitHub package registry
       run: dotnet nuget push ./artifact/*.nupkg --api-key ${{ secrets.NUGETAPIKEY }} --source https://nuget.pkg.github.com/robertath/index.json
+
+
 
     # - name: Setup .NET
     #   uses: actions/setup-dotnet@v3
     #   with:
     #     dotnet-version: 7.0.x
 
+    # - name: Setup NuGet
+    #   uses: NuGet/setup-nuget@v1.0.5
 
     # - name: Pack
     #   run: dotnet pack ${{ env.DOTNET_PATH }}/CalculationEngine.csproj -c ${{ env.CONFIGURATION}} #--output ./artifacts -p:Version=${{ env.VERSION}}
