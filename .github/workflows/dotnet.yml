@@ -64,7 +64,7 @@ jobs:
         NUGET_AUTH_TOKEN: ${{secrets.NUGETAPIKEY}}
     
     - name: Setup NuGet
-      uses: NuGet/setup-nuget@v1.x.x
+      uses: NuGet/setup-nuget@v1.0.5
 
     - name: Restore dependencies
       run: dotnet restore ${{ env.DOTNET_PATH }}   
