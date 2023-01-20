@@ -76,11 +76,14 @@ jobs:
     - name: Generate a NuGet package
       run: dotnet pack ${{ env.DOTNET_PATH }}/CalculationEngine.csproj -c ${{ env.CONFIGURATION}} -o ./artifact
 
+    - name: Push to GitHub package registry
+      run: ls -la
+
     # - name: Add package source
     #   run: dotnet nuget add source https://nuget.pkg.github.com/robertath/index.json -n github -u robertath -p ${{ secrets.NUGETAPIKEY }} --store-password-in-clear-text
 
     - name: Push to GitHub package registry
-      run: dotnet nuget push ${{ env.DOTNET_PATH }}/bin/Release/*.nupkg --api-key ${{ secrets.NUGETAPIKEY }} --source https://nuget.pkg.github.com/robertath/index.json
+      run: dotnet nuget push ./artifact/*.nupkg --api-key ${{ secrets.NUGETAPIKEY }} --source https://nuget.pkg.github.com/robertath/index.json
 
     # - name: Setup .NET
     #   uses: actions/setup-dotnet@v3
