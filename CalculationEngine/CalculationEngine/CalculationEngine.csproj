@@ -7,7 +7,7 @@
 	<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 	<OutputType>Library</OutputType>
 	<PackageId>CalculationEngine</PackageId>
-	<Version>1.0.0</Version>
+	<Version>1.0.1</Version>
 	<Authors>robertath</Authors>
 	<Company>robertath</Company>
 	<PackageDescription>This package for lab nuget package with git action!</PackageDescription>
