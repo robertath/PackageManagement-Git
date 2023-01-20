@@ -50,7 +50,8 @@ jobs:
       run: dotnet nuget list source
 
     - name: Add package source
-      run: dotnet nuget update source https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json -u robertath -p ${{ secrets.NUGETAPIKEY }} --store-password-in-clear-text #if add -n github
+      run: dotnet nuget delete source Source 
+      #run: dotnet nuget update source Source https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json -u robertath -p ${{ secrets.NUGETAPIKEY }} --store-password-in-clear-text #if add -n github
 
     - name: Push to GitHub package registry
       run: dotnet nuget push ./artifact/*.nupkg --api-key ${{ secrets.NUGETAPIKEY }} --source https://nuget.pkg.github.com/robertath/index.json
