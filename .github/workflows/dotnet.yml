@@ -21,7 +21,20 @@ jobs:
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: 7.0.x
+      
+      - name: Install GitVersion
+        uses: gittools/actions/gitversion/setup@0.9.15
+        with:
+          versionSpec: '5.x'      
           
+      - name: Determine Version
+        id: gitversion
+        uses: gittools/actions/gitversion/execute@0.9.15
+        
+      - name: Get Version
+        run: | 
+          echo 'NugetVersionV2': ${{ steps.gitversion.outputs.nuGetVersionV2 }}
+        
       - name: Restore dependencies
         run: dotnet restore ${{ env.DOTNET_PATH }}        
         
@@ -32,7 +45,7 @@ jobs:
         run: dotnet test ${{ env.DOTNET_PATH }} --no-build --verbosity normal
 
       - name: Pack
-        run: dotnet pack ${{ env.DOTNET_PATH }}/CalculationEngine.csproj --output ./artifacts -c ${{ env.CONFIGURATION}} 
+        run: dotnet pack ${{ env.DOTNET_PATH }}/CalculationEngine.csproj --output ./artifacts -c ${{ env.CONFIGURATION}}  -p:Version=${{ steps.gitversion.outputs.nuGetVersionV2 }}
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v2
